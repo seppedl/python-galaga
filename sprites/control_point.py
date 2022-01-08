@@ -1,5 +1,6 @@
-from bezier.control_point_handler import ControlPointHandler
 import pygame
+
+from bezier.control_point_handler import ControlPointHandler
 
 
 class ControlPoint(pygame.sprite.Sprite):
@@ -8,6 +9,8 @@ class ControlPoint(pygame.sprite.Sprite):
                  control_handler_mover: ControlPointHandler):
         super(ControlPoint, self).__init__()
 
+        self.x = None
+        self.y = None
         self.control_points = control_points
         self.q_index = q_index
         self.p_index = p_index
@@ -24,6 +27,7 @@ class ControlPoint(pygame.sprite.Sprite):
     def get_event(self, event):
         pass
 
+    # noinspection PyUnresolvedReferences
     def update(self, keys):
         mouse_pos = pygame.mouse.get_pos()
         mouse_buttons = pygame.mouse.get_pressed()
@@ -34,9 +38,8 @@ class ControlPoint(pygame.sprite.Sprite):
         if self.selected:
             self.rect = self.image.get_rect(
                 center=(mouse_pos[0], mouse_pos[1]))
-            self.control_handler_mover.move_control_handler(
-                ControlPointHandler(self.q_index, self.p_index),
-                mouse_pos[0], mouse_pos[1])
+            self.control_handler_mover.move_control_handler(ControlPointHandler(self.q_index, self.p_index),
+                                                            mouse_pos[0], mouse_pos[1])
         else:
             self.x = self.control_points.get_quartet(
                 self.q_index).get_point(self.p_index).x

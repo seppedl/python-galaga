@@ -29,8 +29,7 @@ class Player(pygame.sprite.Sprite):
         if pressed_keys[K_RIGHT]:
             self.rect.move_ip(5, 0)
 
-        if self.rect.left < 0:
-            self.rect.left = 0
+        self.rect.left = max(self.rect.left, 0)
         if self.rect.right > constants.SCREEN_WIDTH:
             self.rect.right = constants.SCREEN_WIDTH
 

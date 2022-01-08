@@ -1,8 +1,8 @@
-﻿from .control_point_quartet import ControlPointQuartet
-from .path_point import PathPoint
+﻿from bezier.control_point_quartet import ControlPointQuartet
+from bezier.path_point import PathPoint
 
 
-class PathPointCalculator():
+class PathPointCalculator:
 
     @staticmethod
     def calculate_path_point(control_point_quartet: ControlPointQuartet,
@@ -24,8 +24,8 @@ class PathPointCalculator():
         ay: float = control_point_quartet.get_point(
             3).y - control_point_quartet.get_point(0).y - cy - by
 
-        cube: float = time * time * time
-        square: float = time * time
+        cube: float = time**3
+        square: float = time**2
 
         resx: float = (ax * cube) + (bx * square) + \
             (cx * time) + control_point_quartet.get_point(0).x

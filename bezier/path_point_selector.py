@@ -1,36 +1,26 @@
-from .control_point_handler import ControlPointHandler
+from bezier.control_point_handler import ControlPointHandler
 
 
-class PathPointSelector():
+class PathPointSelector:
     def __init__(self, control_point_quartet_collection):
         self.control_point_quartet_collection = control_point_quartet_collection
         self.path_point_mapping = {}
 
-    def create_key(self, quartet_index, control_point_index):
+    @staticmethod
+    def create_key(quartet_index, control_point_index):
         return f'Q{quartet_index}/P{control_point_index}'
 
-    def is_path_point(self, control_point_handler: ControlPointHandler):
-        if control_point_handler.control_point_index == 0 or control_point_handler.control_point_index == 3:
-            return True
-        return False
+    @staticmethod
+    def is_path_point(control_point_handler: ControlPointHandler):
+        return control_point_handler.control_point_index in [0, 3]
 
     def create_path_point_mapping(self):
 
         nr_quartets = self.control_point_quartet_collection.number_of_quartets()
 
         for index in range(nr_quartets):
-            mapped_first_quartet_index = 0
-            if index == 0:
-                mapped_first_quartet_index = nr_quartets - 1
-            else:
-                mapped_first_quartet_index = index - 1
-
-            mapped_last_quartet_index = 0
-            if index < nr_quartets - 1:
-                mapped_last_quartet_index = index + 1
-            else:
-                mapped_last_quartet_index = 0
-
+            mapped_first_quartet_index = nr_quartets - 1 if index == 0 else index - 1
+            mapped_last_quartet_index = index + 1 if index < nr_quartets - 1 else 0
             self.path_point_mapping[self.create_key(index, 0)] = ControlPointHandler(mapped_first_quartet_index, 3)
             self.path_point_mapping[self.create_key(index, 3)] = ControlPointHandler(mapped_last_quartet_index, 0)
 
@@ -68,9 +58,9 @@ class PathPointSelector():
     def get_number_of_quartets(self):
         return self.control_point_quartet_collection.number_of_quartets()
 
-    def find_path_point_of_control_point(self, control_point_handler: ControlPointHandler):
+    @staticmethod
+    def find_path_point_of_control_point(control_point_handler: ControlPointHandler):
         related_control_point = ControlPointHandler(-1, -1)
-
         if control_point_handler.control_point_index == 1:
             related_control_point.control_point_index = 0
         elif control_point_handler.control_point_index == 2:
@@ -96,11 +86,10 @@ class PathPointSelector():
             related_control_points.append(ControlPointHandler(path_point_handler.quartet_index, 2))
             if path_point_handler.quartet_index == 0 and number_of_quartets > 1:
                 related_control_points.append(ControlPointHandler(path_point_handler.quartet_index + 1, 1))
+            elif path_point_handler.quartet_index == last_quartet_index:
+                related_control_points.append(ControlPointHandler(0, 1))
             else:
-                if path_point_handler.quartet_index == last_quartet_index:
-                    related_control_points.append(ControlPointHandler(0, 1))
-                else:
-                    related_control_points.append(ControlPointHandler(path_point_handler.quartet_index + 1, 1))
+                related_control_points.append(ControlPointHandler(path_point_handler.quartet_index + 1, 1))
         else:
             print('error')
             exit(1)

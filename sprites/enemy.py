@@ -1,8 +1,8 @@
 import math
+
 import pygame
 
 import constants
-
 from bezier.path_point_calculator import \
     PathPointCalculator
 
@@ -53,7 +53,8 @@ class Enemy(pygame.sprite.Sprite):
         if int(self.bezier_timer) > self.control_points.number_of_quartets() - 1:
             self.kill()
 
-    def calculate_rotation(self, previous_point, current_point):
+    @staticmethod
+    def calculate_rotation(previous_point, current_point):
         dx = current_point.xpos - previous_point.xpos
         dy = current_point.ypos - previous_point.ypos
 
@@ -62,8 +63,7 @@ class Enemy(pygame.sprite.Sprite):
     def get_surf(self):
         if self.timer % self.interval == 0:
             self.image_index += self.sprite_index_count
-            if self.image_index == self.number_of_images - 1 or \
-                    self.image_index == 0:
+            if self.image_index in [self.number_of_images - 1, 0]:
                 self.sprite_index_count = -self.sprite_index_count
 
         rot_image = pygame.transform.rotate(self.images[self.image_index], self.rotation)

@@ -1,5 +1,5 @@
 import pygame
-from .base_state import BaseState
+from states.base_state import BaseState
 
 
 class Splash(BaseState):

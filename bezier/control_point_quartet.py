@@ -1,7 +1,7 @@
-from .control_point import ControlPoint
+from bezier.control_point import ControlPoint
 
 
-class ControlPointQuartet():
+class ControlPointQuartet:
     def __init__(self,
                  x0, y0,
                  x1, y1,
@@ -20,12 +20,13 @@ class ControlPointQuartet():
     def length(self):
         return len(self.points)
 
+    # noinspection PyUnresolvedReferences
     def is_in_control_point(self, x, y, radius):
         for point, index in enumerate(self.points):
             left = (point.x - x) * (point.x - x) + \
                 (point.y - y) * (point.y - y)
 
             if left < (radius * radius):
-                return (index, True)
+                return index, True
 
-        return (-1, False)
+        return -1, False

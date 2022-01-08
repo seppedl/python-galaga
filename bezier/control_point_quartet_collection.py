@@ -1,13 +1,13 @@
-﻿from .control_point_quartet import ControlPointQuartet
-from .control_point_handler import ControlPointHandler
+﻿from bezier.control_point_quartet import ControlPointQuartet
+from bezier.control_point_handler import ControlPointHandler
 
 
-class ControlPointQuartetCollection():
+class ControlPointQuartetCollection:
     def __init__(self):
         self.control_point_quartets = []
 
-    def add(self, controlPointQuartet: ControlPointQuartet):
-        self.control_point_quartets.append(controlPointQuartet)
+    def add(self, control_point_quartet: ControlPointQuartet):
+        self.control_point_quartets.append(control_point_quartet)
 
     def number_of_quartets(self):
         return len(self.control_point_quartets)
@@ -23,9 +23,9 @@ class ControlPointQuartetCollection():
             result = self.control_point_quartets[quartet_index].is_in_control_point(
                 x, y, image_width)
             if result[0]:
-                return (quartet_index, result[1], True)
+                return quartet_index, result[1], True
 
-        return (-1, -1, False)
+        return -1, -1, False
 
     def get_control_point(self, control_point_handler: ControlPointHandler):
         quartet_index = control_point_handler.quartet_index

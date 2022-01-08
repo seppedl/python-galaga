@@ -4,7 +4,7 @@ import spritesheet
 import constants
 from starfield import StarField
 
-from .base_state import BaseState
+from states.base_state import BaseState
 from sprites.player import Player
 from sprites.rocket import Rocket
 from sprites.enemy import Enemy
@@ -15,16 +15,17 @@ from bezier.control_point_collection_factory import ControlPointCollectionFactor
 from bezier.path_point_calculator import PathPointCalculator
 from bezier.control_handler_mover import ControlHandlerMover
 from bezier.path_point_selector import PathPointSelector
-ADDENEMY = pygame.USEREVENT + 1
-ENEMYSHOOTS = pygame.USEREVENT + 2
+ADD_ENEMY = pygame.USEREVENT + 1
+ENEMY_SHOOTS = pygame.USEREVENT + 2
 FREEZE = pygame.USEREVENT + 3
 
 
+# noinspection PyPep8Naming
 class Gameplay(BaseState):
     def __init__(self):
         super(Gameplay, self).__init__()
-        pygame.time.set_timer(ADDENEMY, 450)
-        pygame.time.set_timer(ENEMYSHOOTS, 1000)
+        pygame.time.set_timer(ADD_ENEMY, 450)
+        pygame.time.set_timer(ENEMY_SHOOTS, 1000)
         pygame.time.set_timer(FREEZE, 2000)
 
         self.rect = pygame.Rect((0, 0), (80, 80))
@@ -88,13 +89,14 @@ class Gameplay(BaseState):
                     point.x, point.y, (255, 120, 120), quartet_index, point_index,
                     self.control_points1, self.mover))
 
+    # noinspection PyUnresolvedReferences
     def get_event(self, event):
         for entity in self.all_sprites:
             entity.get_event(event)
 
         if event.type == pygame.QUIT:
             self.quit = True
-        if event.type == ADDENEMY:
+        if event.type == ADD_ENEMY:
             if self.enemies < self.number_of_enemies:
                 self.add_enemy()
             elif len(self.all_enemies) == 0:
@@ -102,7 +104,7 @@ class Gameplay(BaseState):
                 self.wave_count += 1
                 if self.wave_count > 2:
                     self.wave_count = 0
-        if event.type == ENEMYSHOOTS:
+        if event.type == ENEMY_SHOOTS:
             self.enemy_shoots()
         if event.type == FREEZE:
             if self.freeze:
@@ -113,9 +115,8 @@ class Gameplay(BaseState):
                 self.done = True
             if event.key == pygame.K_s:
                 self.show_control = not self.show_control
-            if event.key == pygame.K_SPACE:
-                if len(self.all_rockets) < 2:
-                    self.shoot_rocket()
+            if event.key == pygame.K_SPACE and len(self.all_rockets) < 2:
+                self.shoot_rocket()
 
     def add_enemy(self):
         self.enemies += 1
@@ -148,20 +149,21 @@ class Gameplay(BaseState):
                     start_rocket = enemy.rect.center
 
             if start_rocket[1] < 400:
-                ySpeed = 7
+                y_speed = 7
                 dx = self.player.rect.centerx - start_rocket[0]
                 dy = self.player.rect.centery - start_rocket[1]
 
-                number_of_steps = dy / ySpeed
+                number_of_steps = dy / y_speed
                 xSpeed = dx / number_of_steps
 
-                rocket = Rocket(self.sprites, xSpeed, ySpeed)
+                rocket = Rocket(self.sprites, xSpeed, y_speed)
                 rocket.rect.centerx = start_rocket[0]
                 rocket.rect.centery = start_rocket[1]
 
                 self.enemy_rockets.add(rocket)
                 self.all_sprites.add(rocket)
 
+    # noinspection PyUnresolvedReferences
     def draw(self, screen):
         self.starfield.render(screen)
         pressed_keys = pygame.key.get_pressed()

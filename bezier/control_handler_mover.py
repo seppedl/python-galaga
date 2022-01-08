@@ -1,9 +1,9 @@
-from .control_point_quartet_collection import ControlPointQuartetCollection
-from .path_point_selector import PathPointSelector
-from .control_point_handler import ControlPointHandler
+from bezier.control_point_handler import ControlPointHandler
+from bezier.control_point_quartet_collection import ControlPointQuartetCollection
+from bezier.path_point_selector import PathPointSelector
 
 
-class ControlHandlerMover():
+class ControlHandlerMover:
     def __init__(self,
                  control_point_quartet_collection: ControlPointQuartetCollection,
                  path_point_selector: PathPointSelector):
@@ -32,11 +32,15 @@ class ControlHandlerMover():
             related_control_point = self.path_point_selector.find_related_control_point(control_point_handler)
             related_path_point = self.path_point_selector.find_path_point_of_control_point(control_point_handler)
 
-            xDistance = self.control_point_quartet_collection.get_control_point(related_path_point).x - x
-            yDistance = self.control_point_quartet_collection.get_control_point(related_path_point).y - y
+            x_distance = self.control_point_quartet_collection.get_control_point(related_path_point).x - x
+            y_distance = self.control_point_quartet_collection.get_control_point(related_path_point).y - y
 
-            self.control_point_quartet_collection.get_control_point(related_control_point).x = self.control_point_quartet_collection.get_control_point(related_path_point).x + xDistance
-            self.control_point_quartet_collection.get_control_point(related_control_point).y = self.control_point_quartet_collection.get_control_point(related_path_point).y + yDistance
+            self.control_point_quartet_collection.get_control_point(
+                related_control_point).x = self.control_point_quartet_collection.get_control_point(
+                related_path_point).x + x_distance
+            self.control_point_quartet_collection.get_control_point(
+                related_control_point).y = self.control_point_quartet_collection.get_control_point(
+                related_path_point).y + y_distance
 
         # The basic tricks in getting this to be a smooth curve across the whole path is to:
         # p3 of the each segment is in common to p0 of next each segment.

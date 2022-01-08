@@ -3,6 +3,7 @@ import pygame
 import constants
 
 
+# noinspection PyPep8Naming
 class Rocket(pygame.sprite.Sprite):
     def __init__(self, sprites, xSpeed, ySpeed):
         super(Rocket, self).__init__()

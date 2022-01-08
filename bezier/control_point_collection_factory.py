@@ -1,8 +1,8 @@
-﻿from .control_point_quartet import ControlPointQuartet
-from .control_point_quartet_collection import ControlPointQuartetCollection
+﻿from bezier.control_point_quartet import ControlPointQuartet
+from bezier.control_point_quartet_collection import ControlPointQuartetCollection
 
 
-class ControlPointCollectionFactory():
+class ControlPointCollectionFactory:
 
     @staticmethod
     def create_collection1():
